@@ -65,22 +65,22 @@ const Index = () => {
         }}
       >
         <div className="container mx-auto px-4 pt-16 md:pt-20 pb-20 md:pb-32">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="font-playfair mb-6 opacity-0 animate-fade-in">
-              <span className="block text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-lg">
+          <div className="max-w-4xl mx-auto text-center px-4">
+            <h1 className="font-playfair mb-6 md:mb-8 animate-fade-in">
+              <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 drop-shadow-lg">
                 <span className="text-yellow-300 inline-block animate-pulse-subtle">Illuminate</span> Your Faith Journey
               </span>
-              <span className="block text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">
+              <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">
                 Through <span className="text-scripture-light">Biblical Exploration</span>
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-8 opacity-0 animate-fade-in animate-delay-200 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 md:mb-8 animate-fade-in animate-delay-200 max-w-3xl mx-auto leading-relaxed">
               Discover profound biblical wisdom through guided reflection, expert commentary, 
               and a supportive community dedicated to authentic spiritual growth.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in animate-delay-300">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in animate-delay-300">
               <Button 
-                className="bg-scripture hover:bg-scripture-dark text-white px-8 py-6 text-lg"
+                className="bg-scripture hover:bg-scripture-dark text-white px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg shadow-md min-h-[50px] font-medium w-full sm:w-auto"
                 asChild
               >
                 <Link to="/sessions">
@@ -89,7 +89,7 @@ const Index = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="border-white text-white hover:bg-white/20 px-8 py-6 text-lg"
+                className="border-white text-white hover:bg-white/20 px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg bg-white/10 min-h-[50px] font-medium w-full sm:w-auto"
                 asChild
               >
                 <Link to="/about">
@@ -121,7 +121,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 xl:gap-8 px-4 sm:px-6 md:px-0">
             {featuredTopics.map((topic) => (
               <TopicCard 
                 key={topic.slug}
@@ -268,21 +268,21 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-10 shadow-xl border border-white/20 max-w-4xl mx-auto">
             <div className="text-center text-white">
-              <div className="inline-block mb-6 p-3 rounded-full bg-white/20 opacity-0 animate-fade-in">
+              <div className="inline-block mb-6 p-3 rounded-full bg-white/20 animate-fade-in">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6 opacity-0 animate-fade-in">
+              <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6 animate-fade-in">
                 Ready to Deepen Your <span className="text-yellow-300">Biblical Understanding</span>?
               </h2>
-              <p className="max-w-2xl mx-auto mb-8 text-white/90 text-lg opacity-0 animate-fade-in animate-delay-100">
+              <p className="max-w-2xl mx-auto mb-8 text-white/90 text-lg animate-fade-in animate-delay-100">
                 Join our community today and start your journey towards more meaningful 
                 scripture engagement and spiritual growth.
               </p>
-              <div className="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in animate-delay-200">
+              <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5 animate-fade-in animate-delay-300 px-4 sm:px-0">
                 <Button 
-                  className="bg-white text-indigo-700 hover:bg-yellow-50 shadow-lg hover:shadow-xl transition-all duration-300 text-base px-6 py-6 h-auto"
+                  className="bg-white text-indigo-700 hover:bg-yellow-50 shadow-lg hover:shadow-xl transition-all duration-300 text-base px-6 py-6 h-auto font-medium"
                   asChild
                 >
                   <Link to="/sessions" className="flex items-center">
@@ -294,7 +294,7 @@ const Index = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-white text-white hover:bg-white/20 shadow-lg hover:shadow-xl transition-all duration-300 text-base px-6 py-6 h-auto"
+                  className="border-white text-white hover:bg-white/20 shadow-lg hover:shadow-xl transition-all duration-300 text-base px-6 py-6 h-auto bg-white/10"
                   asChild
                 >
                   <Link to="/topics" className="flex items-center">

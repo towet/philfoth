@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Quote } from "lucide-react";
 
 interface ScriptureQuoteProps {
@@ -24,12 +23,12 @@ const ScriptureQuote = ({ text, reference }: ScriptureQuoteProps) => {
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <Quote className="absolute top-4 left-6 h-8 w-8 text-scripture/30" />
+      <Quote className="absolute top-4 left-6 h-8 w-8 text-yellow-400" />
       <blockquote className="max-w-3xl mx-auto font-playfair text-xl md:text-2xl lg:text-3xl text-center italic">
         {text}
       </blockquote>
       <footer className="text-center mt-6 text-gray-600 dark:text-gray-400">
-        <cite className="font-playfair not-italic">{reference}</cite>
+        <cite className="font-playfair not-italic text-yellow-400 dark:text-yellow-400">{reference}</cite>
       </footer>
     </div>
   );

@@ -35,25 +35,25 @@ const About = () => {
   
   const team = [
     {
-      name: "Dr. Michael Thomas",
+      name: "Dr. Michael chege",
       role: "Founder & Biblical Studies Director",
       bio: "Dr. Thomas founded SanctumGrace with a vision to make deep biblical understanding accessible to everyone. With over 15 years in biblical scholarship and teaching, he leads our biblical debriefing approach.",
       initial: "MT"
     },
     {
-      name: "Rebecca Johnson",
+      name: "Rebecca muthoni",
       role: "Pastoral Care & Practical Application",
       bio: "Rebecca brings 10 years of pastoral experience to our team, specializing in helping people apply biblical truths to everyday challenges and spiritual growth.",
       initial: "RJ"
     },
     {
-      name: "Dr. James Wilson",
+      name: "Dr. James langat",
       role: "Theological Research & Content",
       bio: "With a PhD in Biblical Theology, Dr. Wilson ensures our resources are theologically sound while remaining accessible and relevant to contemporary believers.",
       initial: "JW"
     },
     {
-      name: "Sarah Cohen",
+      name: "Sarah kwamboka",
       role: "Languages & Historical Context",
       bio: "Sarah's expertise in biblical languages and ancient Near Eastern culture provides crucial insights for understanding Scripture in its original context.",
       initial: "SC"
@@ -131,7 +131,7 @@ const About = () => {
               
               <div className="prose dark:prose-invert max-w-none">
                 <p>
-                  SanctumGrace began in 2018 when Dr. Michael Thomas, after years of teaching biblical studies at the university level, recognized a growing disconnect between academic biblical scholarship and everyday believers' understanding of Scripture.
+                    Philfoth began in 2024 when Dr. Michael, after years of teaching biblical studies at the university level, recognized a growing disconnect between academic biblical scholarship and everyday believers' understanding of Scripture.
                 </p>
                 
                 <p>
@@ -317,22 +317,12 @@ const About = () => {
                 <h3 className="font-medium mb-2">Email Us</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">
                   <a href="mailto:contact@sanctumgrace.com" className="hover:text-scripture transition-colors">
-                    contact@sanctumgrace.com
+                    contact@philfoth.com
                   </a>
                 </p>
               </div>
               
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg text-center">
-                <div className="h-12 w-12 rounded-full bg-scripture/10 mx-auto mb-4 flex items-center justify-center">
-                  <MapPin className="h-5 w-5 text-scripture" />
-                </div>
-                <h3 className="font-medium mb-2">Visit Us</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  123 Faith Avenue<br />
-                  Grace City, GC 12345<br />
-                  United States
-                </p>
-              </div>
+              
               
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg text-center">
                 <div className="h-12 w-12 rounded-full bg-scripture/10 mx-auto mb-4 flex items-center justify-center">

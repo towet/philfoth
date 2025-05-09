@@ -1,5 +1,7 @@
-
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import JoinSessionDialog from "@/components/JoinSessionDialog";
+import { sendCustomSessionRequestEmail } from "@/utils/email";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScriptureQuote from "@/components/ScriptureQuote";
@@ -22,6 +24,17 @@ import { Label } from "@/components/ui/label";
 const Sessions = () => {
   const [sessionFormat, setSessionFormat] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSession, setSelectedSession] = useState<any>(null);
+  const [joinDialogOpen, setJoinDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    format: "",
+    topic: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const toast = useToast();
   
   const sessions = [
     {
@@ -233,7 +246,14 @@ const Sessions = () => {
                   </CardContent>
                   
                   <CardFooter className="pt-0 flex justify-between items-center">
-                    <Button variant="outline" className="text-scripture border-scripture hover:bg-scripture/10">
+                    <Button 
+                      variant="outline" 
+                      className="text-scripture border-scripture hover:bg-scripture/10 bg-scripture/5"
+                      onClick={() => {
+                        setSelectedSession(session);
+                        setJoinDialogOpen(true);
+                      }}
+                    >
                       Join Session
                     </Button>
                     <Button variant="ghost" size="sm" className="text-gray-500">
@@ -275,13 +295,15 @@ const Sessions = () => {
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                   <div className="flex items-center mb-4">
                     <div className="h-16 w-16 rounded-full bg-gray-200 dark:bg-gray-700 mr-4 overflow-hidden">
-                      <div className="w-full h-full bg-scripture/20 flex items-center justify-center">
-                        <span className="text-2xl font-semibold text-scripture">MT</span>
-                      </div>
+                      <img 
+                        src="https://media.istockphoto.com/id/165928218/photo/confident-business-man-smiling.jpg?s=612x612&w=0&k=20&c=BnLd6UUENYW8wqE3bc6i3_e1LAITiKNkXNBy4pULd8E=" 
+                        alt="Dr. Michael Thomas" 
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <div>
                       <h3 className="font-playfair text-xl font-medium">Dr. Michael Thomas</h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">Biblical Studies Professor</p>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">Biblical Scholar & Theologian</p>
                     </div>
                   </div>
                   <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
@@ -289,16 +311,17 @@ const Sessions = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500 dark:text-gray-500">3 upcoming sessions</span>
-                    <Button variant="ghost" className="text-scripture hover:text-scripture-dark p-0">View Profile</Button>
                   </div>
                 </div>
                 
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
                   <div className="flex items-center mb-4">
                     <div className="h-16 w-16 rounded-full bg-gray-200 dark:bg-gray-700 mr-4 overflow-hidden">
-                      <div className="w-full h-full bg-scripture/20 flex items-center justify-center">
-                        <span className="text-2xl font-semibold text-scripture">RJ</span>
-                      </div>
+                      <img 
+                        src="https://i.pinimg.com/236x/fd/ab/e7/fdabe740df5935acb6cf59a40dcf1bbe.jpg" 
+                        alt="Pastor Rebecca Johnson" 
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <div>
                       <h3 className="font-playfair text-xl font-medium">Pastor Rebecca Johnson</h3>
@@ -310,7 +333,6 @@ const Sessions = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500 dark:text-gray-500">2 upcoming sessions</span>
-                    <Button variant="ghost" className="text-scripture hover:text-scripture-dark p-0">View Profile</Button>
                   </div>
                 </div>
               </div>
@@ -328,22 +350,85 @@ const Sessions = () => {
               <p className="text-gray-600 dark:text-gray-400 text-center mb-8 max-w-2xl mx-auto">
                 Don't see a session on the topic you're interested in? Request a custom session and our biblical teachers will work with you to create a tailored learning experience.
               </p>
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                <Input placeholder="Your name" />
-                <Input placeholder="Your email" type="email" />
-                <Input placeholder="Preferred session format" className="md:col-span-2" />
+              <form className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto" onSubmit={async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                try {
+                  const result = await sendCustomSessionRequestEmail(formData);
+                  if (result.success) {
+                    toast.toast({
+                      title: "Success!",
+                      description: "Your custom session request has been sent. We'll be in touch soon!",
+                      variant: "default",
+                    });
+                    setFormData({
+                      name: "",
+                      email: "",
+                      format: "",
+                      topic: "",
+                      message: ""
+                    });
+                  } else {
+                    toast.toast({
+                      title: "Error",
+                      description: "There was a problem sending your request. Please try again later.",
+                      variant: "destructive",
+                    });
+                  }
+                } catch (error) {
+                  toast.toast({
+                    title: "Error",
+                    description: "There was a problem sending your request. Please try again later.",
+                    variant: "destructive",
+                  });
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}>
+                <Input 
+                  placeholder="Your name" 
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  required
+                />
+                <Input 
+                  placeholder="Your email" 
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  required
+                />
+                <Input 
+                  placeholder="Preferred session format" 
+                  className="md:col-span-2"
+                  value={formData.format}
+                  onChange={(e) => setFormData(prev => ({ ...prev, format: e.target.value }))}
+                  required
+                />
                 <div className="md:col-span-2">
-                  <Input placeholder="Topic of interest" />
+                  <Input 
+                    placeholder="Topic of interest" 
+                    value={formData.topic}
+                    onChange={(e) => setFormData(prev => ({ ...prev, topic: e.target.value }))}
+                    required
+                  />
                 </div>
                 <div className="md:col-span-2">
                   <textarea 
                     placeholder="Tell us more about what you'd like to learn..."
                     className="w-full px-4 py-2 text-sm rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-scripture min-h-[100px]"
+                    value={formData.message}
+                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                    required
                   ></textarea>
                 </div>
                 <div className="md:col-span-2 flex justify-center mt-4">
-                  <Button className="bg-scripture hover:bg-scripture-dark px-8">
-                    Submit Request
+                  <Button 
+                    type="submit" 
+                    className="bg-scripture hover:bg-scripture-dark px-8" 
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Request"}
                   </Button>
                 </div>
               </form>
@@ -353,6 +438,15 @@ const Sessions = () => {
       </main>
       
       <Footer />
+      
+      {/* Join Session Dialog */}
+      {selectedSession && (
+        <JoinSessionDialog 
+          isOpen={joinDialogOpen}
+          onClose={() => setJoinDialogOpen(false)}
+          sessionTitle={selectedSession.title}
+        />
+      )}
     </div>
   );
 };

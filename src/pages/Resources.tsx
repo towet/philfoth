@@ -194,6 +194,8 @@ const Resources = () => {
           </div>
         </section>
         
+        {/* Removed duplicate featured resource banner */}
+
         {/* Scripture Quote */}
         <section className="py-10 bg-gray-50 dark:bg-gray-900">
           <ScriptureQuote 
@@ -344,20 +346,13 @@ const Resources = () => {
                       
                       <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                          {resource.downloadCount && (
-                            <span className="flex items-center"><Download className="h-3 w-3 mr-1 inline" /> {resource.downloadCount} downloads</span>
-                          )}
+                          {/* Download count removed */}
                           {resource.views && (
                             <span className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg> {resource.views} views</span>
                           )}
-                          {resource.listens && (
-                            <span className="flex items-center"><Headphones className="h-3 w-3 mr-1 inline" /> {resource.listens} listens</span>
-                          )}
+                          {/* Listens count removed */}
                         </div>
-                        <Button variant="outline" size="sm" className={`flex items-center gap-2 border-none shadow-sm w-full sm:w-auto ${getResourceBgColor(resource.type)} hover:shadow-md transition-all duration-300`}>
-                          <Download className="h-4 w-4" />
-                          <span>Download</span>
-                        </Button>
+                        {/* Download button removed */}
                       </CardFooter>
                     </Card>
                   ))}
@@ -406,7 +401,10 @@ const Resources = () => {
                     <span className="mx-2 text-amber-400 hidden sm:inline">•</span>
                     <span className="flex items-center"><Download className="h-3.5 w-3.5 mr-1 text-amber-700 dark:text-amber-400" /> PDF & Print</span>
                   </div>
-                  <Button className="bg-amber-600 hover:bg-amber-700 dark:bg-amber-700 dark:hover:bg-amber-600 w-full sm:w-fit shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base">
+                  <Button 
+                    className="bg-amber-600 hover:bg-amber-700 dark:bg-amber-700 dark:hover:bg-amber-600 w-full sm:w-fit shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base"
+                    onClick={() => window.open('https://executableoutlines.com/pdf/mt_so.pdf', '_blank')}
+                  >
                     <Download className="h-4 w-4 mr-2" /> Download Now
                   </Button>
                 </div>

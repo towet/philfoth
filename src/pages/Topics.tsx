@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import { sendSubscriptionEmail } from "@/utils/email";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TopicCard from "@/components/TopicCard";
@@ -11,6 +13,41 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const Topics = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const toast = useToast();
+  
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setIsSubmitting(true);
+    try {
+      const result = await sendSubscriptionEmail(email);
+      if (result.success) {
+        toast.toast({
+          title: "Success!",
+          description: "You've been subscribed to our newsletter!",
+          variant: "default",
+        });
+        setEmail("");
+      } else {
+        toast.toast({
+          title: "Error",
+          description: "There was a problem with your subscription. Please try again later.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast.toast({
+        title: "Error",
+        description: "There was a problem with your subscription. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   const topics = [
     {
@@ -241,7 +278,7 @@ const Topics = () => {
                     <div className="bg-scripture h-full rounded-full w-3/4"></div>
                   </div>
                 </div>
-                <Button variant="outline" className="w-full border-scripture text-scripture hover:bg-scripture/10">
+                <Button variant="outline" className="w-full border-scripture text-scripture hover:bg-scripture/10 bg-scripture/5 font-medium shadow-sm">
                   View Topic Guide
                 </Button>
               </div>
@@ -259,12 +296,23 @@ const Topics = () => {
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Sign up for our newsletter to receive weekly Scripture insights, study prompts, and resources directly to your inbox.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Input placeholder="Your email address" className="flex-grow" />
-                    <Button className="bg-scripture hover:bg-scripture-dark whitespace-nowrap">
-                      Subscribe Now
+                  <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
+                    <Input 
+                      placeholder="Your email address" 
+                      className="flex-grow" 
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <Button 
+                      type="submit" 
+                      className="bg-scripture hover:bg-scripture-dark whitespace-nowrap"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Subscribing..." : "Subscribe Now"}
                     </Button>
-                  </div>
+                  </form>
                 </div>
                 <div className="md:w-2/5 flex justify-center">
                   <div className="h-32 w-32 rounded-full bg-scripture/10 flex items-center justify-center">

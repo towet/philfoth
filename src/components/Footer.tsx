@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-50 dark:bg-gray-900 pt-16 pb-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-6 mb-12">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <BookOpen className="h-6 w-6 text-scripture" />
@@ -108,18 +108,18 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+            <p className="text-gray-500 dark:text-gray-400 text-sm text-center md:text-left">
               © {new Date().getFullYear()} SanctumGrace. All rights reserved.
             </p>
-            <div className="flex space-x-6 text-sm">
-              <Link to="/privacy" className="text-gray-500 dark:text-gray-400 hover:text-scripture dark:hover:text-scripture-light transition-colors">
+            <div className="flex flex-wrap justify-center gap-4 md:gap-0 md:space-x-6 text-sm">
+              <Link to="/privacy" className="text-gray-500 dark:text-gray-400 hover:text-scripture dark:hover:text-scripture-light transition-colors py-2 px-1">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-gray-500 dark:text-gray-400 hover:text-scripture dark:hover:text-scripture-light transition-colors">
+              <Link to="/terms" className="text-gray-500 dark:text-gray-400 hover:text-scripture dark:hover:text-scripture-light transition-colors py-2 px-1">
                 Terms of Service
               </Link>
-              <Link to="/cookies" className="text-gray-500 dark:text-gray-400 hover:text-scripture dark:hover:text-scripture-light transition-colors">
+              <Link to="/cookies" className="text-gray-500 dark:text-gray-400 hover:text-scripture dark:hover:text-scripture-light transition-colors py-2 px-1">
                 Cookie Policy
               </Link>
             </div>

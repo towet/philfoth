@@ -10,12 +10,69 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "@/components/ui/use-toast";
 
 const DonateSection = () => {
   const [amount, setAmount] = useState<number | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAmount = (value: number) => {
     setAmount(value);
+  };
+  
+  const handlePayPalDonation = () => {
+    if (!amount || amount <= 0) {
+      toast({
+        title: "Donation Error",
+        description: "Please select or enter a valid donation amount.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    // Same PayPal business email used in the Donate page
+    const payPalBusinessId = 'Estherwangi374@gmail.com';
+    
+    // Construct the PayPal URL
+    let payPalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=${payPalBusinessId}&currency_code=USD`;
+    
+    // Add item name with donor name if provided
+    let itemName = "Donation to SanctumGrace";
+    if (name) {
+      itemName += ` from ${name}`;
+    }
+    
+    payPalUrl += `&item_name=${encodeURIComponent(itemName)}`;
+    
+    // Add amount
+    if (amount && amount > 0) {
+      payPalUrl += `&amount=${amount.toFixed(2)}`;
+    }
+    
+    // Add return URL and note if email is provided
+    if (email) {
+      // Just for tracking purposes, not essential for donation
+      payPalUrl += `&custom=${encodeURIComponent(email)}`;
+    }
+    
+    // Open PayPal in a new window
+    window.open(payPalUrl, '_blank', 'noopener,noreferrer');
+    
+    // Reset form after successful submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setAmount(null);
+      setName("");
+      setEmail("");
+      toast({
+        title: "Thank you!",
+        description: "You will be redirected to PayPal to complete your donation."
+      });
+    }, 1000);
   };
 
   const predefinedAmounts = [10, 25, 50, 100];
@@ -82,11 +139,15 @@ const DonateSection = () => {
               <input
                 type="text"
                 placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-scripture bg-white dark:bg-gray-800"
               />
               <input
                 type="email"
                 placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-scripture bg-white dark:bg-gray-800"
               />
             </div>
@@ -95,9 +156,10 @@ const DonateSection = () => {
           <CardFooter>
             <Button 
               className="w-full bg-gold hover:bg-gold-dark text-black font-semibold py-2"
-              disabled={!amount}
+              disabled={!amount || isSubmitting}
+              onClick={handlePayPalDonation}
             >
-              Donate ${amount?.toFixed(2) || '0.00'}
+              {isSubmitting ? 'Processing...' : `Donate $${amount?.toFixed(2) || '0.00'}`}
             </Button>
           </CardFooter>
         </Card>

@@ -23,6 +23,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import React from 'react';
 
 const Donate = () => {
   const [donationType, setDonationType] = useState("one-time");
@@ -35,12 +36,82 @@ const Donate = () => {
       setCustomAmount("");
     }
   };
+
+  const handlePayPalDonation = (options?: { amount?: string | number; type?: 'one-time' | 'monthly'; isGeneric?: boolean }) => {
+    const payPalBusinessId = 'Estherwangi374@gmail.com';
+    let finalAmountStr: string = "";
+    let finalType: 'one-time' | 'monthly' = 'one-time'; // Default type
+    let itemName: string = "Donation to SanctumGrace"; // Default item name
+
+    if (options?.isGeneric) {
+        // Generic donation, amount will be entered on PayPal's side.
+        finalType = 'one-time'; // Generic donations usually use _donations command
+        itemName = "General Donation to SanctumGrace";
+    } else if (options?.amount !== undefined && options?.type) {
+        // Specific donation from tier card or explicit call with amount/type
+        finalAmountStr = String(options.amount);
+        finalType = options.type;
+        if (!finalAmountStr || parseFloat(finalAmountStr) <= 0) {
+            alert("Please enter a valid amount."); // General for any custom amount passed
+            return;
+        }
+        itemName = `${finalType === 'monthly' ? 'Monthly S' : 'S'}upport: $${parseFloat(finalAmountStr).toFixed(2)} to SanctumGrace`;
+    } else {
+        // Donation from the main form using component state
+        finalType = donationType as 'one-time' | 'monthly';
+        if (donationAmount === "custom") {
+            finalAmountStr = customAmount;
+        } else {
+            finalAmountStr = donationAmount;
+        }
+
+        if (!finalAmountStr || parseFloat(finalAmountStr) <= 0) {
+            alert("Please select or enter a valid donation amount before proceeding.");
+            return;
+        }
+        itemName = `${finalType === 'monthly' ? 'Monthly D' : 'D'}onation: $${parseFloat(finalAmountStr).toFixed(2)} to SanctumGrace`;
+    }
+
+    let payPalUrl = "";
+
+    if (finalType === 'monthly') {
+        payPalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick-subscriptions&business=${payPalBusinessId}&currency_code=USD`;
+        payPalUrl += `&item_name=${encodeURIComponent(itemName)}`;
+        if (finalAmountStr && parseFloat(finalAmountStr) > 0) {
+            payPalUrl += `&a3=${parseFloat(finalAmountStr).toFixed(2)}`; // Subscription amount
+            payPalUrl += `&p3=1`;      // Subscription duration (e.g., 1 for 1 unit of t3)
+            payPalUrl += `&t3=M`;      // Subscription unit (M for Month)
+            payPalUrl += `&src=1`;     // Make subscription recurring
+            payPalUrl += `&no_shipping=1`; // No shipping address needed
+        } else if (!options?.isGeneric) { // Only alert if not generic and amount is invalid for monthly
+             alert("A valid amount is required for monthly subscriptions.");
+             return;
+        }
+    } else { // One-time donation or generic (which defaults to one-time cmd=_donations)
+        payPalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=${payPalBusinessId}&currency_code=USD`;
+        payPalUrl += `&item_name=${encodeURIComponent(itemName)}`;
+        if (!options?.isGeneric && finalAmountStr && parseFloat(finalAmountStr) > 0) {
+            payPalUrl += `&amount=${parseFloat(finalAmountStr).toFixed(2)}`;
+        }
+    }
+    window.open(payPalUrl, '_blank', 'noopener,noreferrer');
+  };
   
+  // Calculate display amounts for buttons
+  let currentDisplayAmount = "";
+  if (donationAmount === "custom") {
+    currentDisplayAmount = parseFloat(customAmount) > 0 ? parseFloat(customAmount).toFixed(2) : "";
+  } else if (donationAmount && donationAmount !== "custom") {
+    currentDisplayAmount = parseFloat(donationAmount).toFixed(2);
+  }
+
+  const oneTimeButtonText = currentDisplayAmount ? `Donate $${currentDisplayAmount} with PayPal` : "Donate with PayPal";
+  const monthlyButtonText = currentDisplayAmount ? `Support Monthly $${currentDisplayAmount} with PayPal` : "Support Monthly with PayPal";
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      
-      <main className="flex-grow">
+      <main className="flex-grow pt-20 overflow-x-hidden">
         {/* Hero Section */}
         <section className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 pt-28 pb-16">
           <div className="container mx-auto px-4 text-center">
@@ -72,7 +143,7 @@ const Donate = () => {
               
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-8">
                 <Tabs defaultValue="donate" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2 mb-8">
+                  <TabsList className="grid w-full grid-cols-2 mb-6 max-w-sm mx-auto">
                     <TabsTrigger value="donate">Donate</TabsTrigger>
                     <TabsTrigger value="monthly">Become a Supporter</TabsTrigger>
                   </TabsList>
@@ -100,82 +171,74 @@ const Donate = () => {
                       
                       <div className="space-y-2">
                         <h3 className="text-lg font-medium">Select Amount</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <RadioGroup
+                          value={donationAmount}
+                          onValueChange={handleDonationAmountChange}
+                          className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           {["25", "50", "100", "250"].map((amount) => (
-                            <Button
-                              key={amount}
-                              type="button"
-                              variant={donationAmount === amount ? "default" : "outline"}
-                              className={donationAmount === amount ? "bg-scripture hover:bg-scripture-dark" : "border-scripture text-scripture hover:bg-scripture/10"}
-                              onClick={() => handleDonationAmountChange(amount)}
-                            >
-                              ${amount}
-                            </Button>
+                            <React.Fragment key={amount}>
+                              <RadioGroupItem
+                                value={amount}
+                                id={`amount-${amount}`}
+                                className="sr-only" // Hide the actual radio input
+                              />
+                              <Label
+                                htmlFor={`amount-${amount}`}
+                                className={`cursor-pointer rounded-md border-2 p-3 text-center font-medium transition-all duration-200 ease-in-out 
+                                  ${donationAmount === amount 
+                                    ? 'bg-scripture text-white border-scripture shadow-md ring-2 ring-scripture ring-offset-2 dark:ring-offset-gray-900'
+                                    : 'border-gray-300 hover:border-scripture dark:border-gray-700 dark:hover:border-scripture text-gray-700 dark:text-gray-300 hover:bg-scripture/10'}`}
+                              >
+                                ${amount}
+                              </Label>
+                            </React.Fragment>
                           ))}
-                        </div>
+                        </RadioGroup>
                         
-                        <div className="flex items-center space-x-2 mt-3">
-                          <RadioGroupItem 
-                            value="custom" 
-                            id="custom" 
-                            checked={donationAmount === "custom"}
-                            onClick={() => handleDonationAmountChange("custom")}
-                          />
-                          <Label htmlFor="custom" className="flex-grow">
+                        {/* Custom Amount Radio Option - needs to be part of a RadioGroup if it's a radio item */}
+                        {/* For now, let's make it visually distinct but still connected logically */}
+                        <div 
+                          className={`mt-3 flex items-center space-x-2 rounded-md border-2 p-3 transition-all duration-200 ease-in-out ${donationAmount === "custom" 
+                            ? 'border-scripture shadow-md ring-2 ring-scripture ring-offset-2 dark:ring-offset-gray-900 bg-scripture/5'
+                            : 'border-gray-300 hover:border-scripture dark:border-gray-700 dark:hover:border-scripture'}`}
+                          onClick={() => handleDonationAmountChange("custom")}
+                        >
+                          {/* We'll use a custom styled div that acts like a radio, or remove RadioGroupItem if it's just a trigger */}
+                          <div 
+                            className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${donationAmount === "custom" ? 'border-scripture bg-scripture' : 'border-gray-400'}`}
+                          >
+                            {donationAmount === "custom" && <div className="h-2.5 w-2.5 rounded-full bg-white" />} 
+                          </div>
+                          <Label htmlFor="custom-amount-input" className="flex-grow cursor-pointer">
                             <div className="flex items-center">
-                              <span className="mr-2">Custom amount:</span>
+                              <span className="mr-2 text-gray-700 dark:text-gray-300">Custom amount:</span>
                               <Input 
+                                id="custom-amount-input"
                                 type="text"
                                 placeholder="$ Enter amount"
                                 value={customAmount}
+                                onClick={(e) => e.stopPropagation()} // Prevent click from bubbling to parent div
                                 onChange={(e) => {
                                   setCustomAmount(e.target.value);
-                                  setDonationAmount("custom");
+                                  if (donationAmount !== "custom") {
+                                    handleDonationAmountChange("custom");
+                                  }
                                 }}
-                                className="max-w-[150px]"
+                                className="max-w-[150px] md:max-w-[200px] min-h-[44px] dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-500"
                               />
                             </div>
                           </Label>
                         </div>
                       </div>
                       
-                      <div className="space-y-4">
-                        <h3 className="text-lg font-medium">Your Information</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <Input placeholder="First Name" />
-                          <Input placeholder="Last Name" />
-                        </div>
-                        <Input placeholder="Email Address" type="email" />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium">Payment Information</h3>
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-md">
-                          <div className="space-y-4">
-                            <Input placeholder="Card Number" />
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                              <Input placeholder="MM / YY" />
-                              <Input placeholder="CVV" />
-                              {donationType === "monthly" && (
-                                <div className="md:col-span-1">
-                                  <Input placeholder="Billing Zip Code" />
-                                </div>
-                              )}
-                            </div>
-                            
-                            {donationType === "one-time" && (
-                              <Input placeholder="Billing Zip Code" />
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <Button className="w-full bg-scripture hover:bg-scripture-dark py-6 text-lg">
-                        {donationType === "one-time" ? "Complete Donation" : "Start Monthly Giving"}
+                      <Button 
+                        onClick={() => handlePayPalDonation()} // Use default behavior (component state)
+                        className="w-full bg-scripture hover:bg-scripture-dark py-6 md:py-7 text-base md:text-lg min-h-[50px] font-medium"
+                      >
+                        {oneTimeButtonText}
                       </Button>
-                      
-                      <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                        Your donation is secure. We never store your full card information.
+                      <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+                        You will be redirected to PayPal. <br/> (Developer: Please ensure your PayPal ID is set in the code.)
                       </p>
                     </div>
                   </TabsContent>
@@ -186,10 +249,10 @@ const Donate = () => {
                         Join our community of monthly supporters who make our ongoing work possible through regular contributions.
                       </p>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
                         <Card className="border-2 hover:border-scripture transition-all duration-300">
                           <CardHeader>
-                            <div className="h-12 w-12 rounded-full bg-scripture/10 flex items-center justify-center mb-3">
+                            <div className="h-12 w-12 rounded-full bg-scripture/10 mx-auto mb-3 flex items-center justify-center">
                               <BookOpen className="h-6 w-6 text-scripture" />
                             </div>
                             <CardTitle>Friend</CardTitle>
@@ -216,8 +279,11 @@ const Donate = () => {
                             </ul>
                           </CardContent>
                           <CardFooter>
-                            <Button className="w-full bg-scripture hover:bg-scripture-dark">
-                              Select
+                            <Button 
+                              onClick={() => handlePayPalDonation({ amount: 10, type: 'monthly' })}
+                              className="w-full bg-scripture hover:bg-scripture-dark"
+                            >
+                              Support Monthly $10
                             </Button>
                           </CardFooter>
                         </Card>
@@ -227,7 +293,7 @@ const Donate = () => {
                             <Badge className="bg-gold-dark hover:bg-gold-dark">Most Popular</Badge>
                           </div>
                           <CardHeader>
-                            <div className="h-12 w-12 rounded-full bg-scripture/10 flex items-center justify-center mb-3">
+                            <div className="h-12 w-12 rounded-full bg-scripture/10 mx-auto mb-3 flex items-center justify-center">
                               <Heart className="h-6 w-6 text-scripture" />
                             </div>
                             <CardTitle>Partner</CardTitle>
@@ -258,15 +324,18 @@ const Donate = () => {
                             </ul>
                           </CardContent>
                           <CardFooter>
-                            <Button className="w-full bg-scripture hover:bg-scripture-dark">
-                              Select
+                            <Button 
+                              onClick={() => handlePayPalDonation({ amount: 25, type: 'monthly' })}
+                              className="w-full bg-scripture hover:bg-scripture-dark"
+                            >
+                              Support Monthly $25
                             </Button>
                           </CardFooter>
                         </Card>
                         
                         <Card className="border-2 hover:border-scripture transition-all duration-300">
                           <CardHeader>
-                            <div className="h-12 w-12 rounded-full bg-scripture/10 flex items-center justify-center mb-3">
+                            <div className="h-12 w-12 rounded-full bg-scripture/10 mx-auto mb-3 flex items-center justify-center">
                               <Users className="h-6 w-6 text-scripture" />
                             </div>
                             <CardTitle>Sustainer</CardTitle>
@@ -297,8 +366,11 @@ const Donate = () => {
                             </ul>
                           </CardContent>
                           <CardFooter>
-                            <Button className="w-full bg-scripture hover:bg-scripture-dark">
-                              Select
+                            <Button 
+                              onClick={() => handlePayPalDonation({ amount: 50, type: 'monthly' })}
+                              className="w-full bg-scripture hover:bg-scripture-dark"
+                            >
+                              Support Monthly $50
                             </Button>
                           </CardFooter>
                         </Card>
@@ -308,7 +380,11 @@ const Donate = () => {
                         <p className="mb-4 text-gray-600 dark:text-gray-400">
                           Prefer to make a custom monthly donation?
                         </p>
-                        <Button variant="outline" className="border-scripture text-scripture hover:bg-scripture/10">
+                        <Button 
+                          onClick={() => handlePayPalDonation({ amount: customAmount, type: 'monthly' })}
+                          variant="outline" 
+                          className="border-scripture text-scripture hover:bg-scripture/10"
+                        >
                           Custom Monthly Amount
                         </Button>
                       </div>
@@ -476,7 +552,7 @@ const Donate = () => {
                     <div className="flex items-start">
                       <div className="mr-4">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-scripture" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                       </div>
                       <div>
@@ -559,8 +635,11 @@ const Donate = () => {
               <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
                 Every donation, regardless of size, helps us continue our mission of making Scripture accessible, understandable, and transformative. Join us in this important work.
               </p>
-              <Button className="bg-scripture hover:bg-scripture-dark px-12 py-6 text-lg">
-                Donate Today
+              <Button 
+                onClick={() => handlePayPalDonation({ isGeneric: true })}
+                className="bg-scripture hover:bg-scripture-dark px-12 py-6 text-lg"
+              >
+                Donate with PayPal
               </Button>
             </div>
           </div>

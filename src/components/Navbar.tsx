@@ -59,8 +59,13 @@ const Navbar = () => {
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-scripture transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link to="/donate" aria-label="Donate">
-            <Button variant="outline" className="border-gold text-gold-dark hover:bg-gold/10 hover-scale-sm">
-              Donate
+            <Button className="donate-btn rounded-full px-6 py-5 shadow-md transform transition-all duration-300">
+              <span className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                Donate
+              </span>
             </Button>
           </Link>
           <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-foreground hover:bg-foreground/5" aria-label="Search">
@@ -103,11 +108,16 @@ const Navbar = () => {
           <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between opacity-0 animate-fade-in" style={{ animationDelay: '400ms' }}>
             <Link 
               to="/donate" 
-              className="text-lg font-medium text-gold-dark py-3 px-6 bg-gold/10 rounded-md hover:bg-gold/20 transition-colors flex-1 text-center"
+              className="text-lg font-medium py-3 px-6 rounded-full flex-1 text-center donate-btn shadow-md"
               onClick={() => setIsMenuOpen(false)}
               aria-label="Donate"
             >
-              Donate
+              <span className="flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                Donate
+              </span>
             </Link>
             
             <Button 

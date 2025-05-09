@@ -559,32 +559,28 @@ const TopicDetail = () => {
         <div className="container mx-auto px-4 relative z-10 text-white">
           <Link 
             to="/topics" 
-            className="inline-flex items-center text-white/90 hover:text-white mb-6 opacity-0 animate-fade-in"
+            className="inline-flex items-center text-white/90 hover:text-white mb-6 animate-fade-in bg-black/20 px-3 py-1 rounded-md"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Topics
           </Link>
           
           <div className="max-w-4xl">
-            <div className={`h-16 w-16 rounded-full ${topic.color} flex items-center justify-center mb-6 opacity-0 animate-fade-in`}>
+            <div className={`h-16 w-16 rounded-full ${topic.color} flex items-center justify-center mb-6 animate-fade-in shadow-lg`}>
               {topic.icon}
             </div>
-            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold mb-4 opacity-0 animate-fade-in">
+            <h1 className="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold mb-4 animate-fade-in">
               {topic.title}
             </h1>
-            <p className="text-lg md:text-xl opacity-95 max-w-3xl mb-8 opacity-0 animate-fade-in animate-delay-100">
+            <p className="text-lg md:text-xl opacity-95 max-w-3xl mb-8 animate-fade-in animate-delay-100">
               {topic.description}
             </p>
-            <div className="flex flex-wrap gap-3 opacity-0 animate-fade-in animate-delay-200">
-              <Button size="sm" variant="outline" className="border-white/60 text-white hover:bg-white/20 hover:border-white">
-                <Download className="h-4 w-4 mr-2" />
-                Download Resources
-              </Button>
-              <Button size="sm" variant="outline" className="border-white/60 text-white hover:bg-white/20 hover:border-white">
+            <div className="flex flex-wrap gap-3 animate-fade-in animate-delay-200">
+              <Button size="sm" variant="outline" className="border-white/60 text-white hover:bg-white/20 hover:border-white bg-white/10 font-medium shadow-sm">
                 <Share2 className="h-4 w-4 mr-2" />
                 Share
               </Button>
-              <Button size="sm" variant="outline" className="border-white/60 text-white hover:bg-white/20 hover:border-white">
+              <Button size="sm" variant="outline" className="border-white/60 text-white hover:bg-white/20 hover:border-white bg-white/10 font-medium shadow-sm">
                 <Bookmark className="h-4 w-4 mr-2" />
                 Save for Later
               </Button>
@@ -597,7 +593,7 @@ const TopicDetail = () => {
       <section className="py-12 bg-white dark:bg-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed opacity-0 animate-fade-in">
+            <p className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed animate-fade-in">
               {topic.introText}
             </p>
           </div>
@@ -608,12 +604,12 @@ const TopicDetail = () => {
       <section className="py-12 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-playfair text-3xl font-bold mb-8 opacity-0 animate-fade-in">Key Passages</h2>
+            <h2 className="font-playfair text-3xl font-bold mb-8 animate-fade-in">Key Passages</h2>
             <div className="space-y-6">
               {topic.keyPassages.map((passage: any, index: number) => (
                 <div 
                   key={passage.reference}
-                  className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 shadow-sm opacity-0 animate-fade-in"
+                  className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 shadow-sm animate-fade-in"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <p className="italic text-gray-700 dark:text-gray-300 mb-3">"{passage.text}"</p>
@@ -629,9 +625,9 @@ const TopicDetail = () => {
       <section className="py-12 bg-white dark:bg-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-playfair text-3xl font-bold mb-8 opacity-0 animate-fade-in">Study Guide</h2>
+            <h2 className="font-playfair text-3xl font-bold mb-8 animate-fade-in">Study Guide</h2>
             
-            <Tabs defaultValue="questions" className="w-full opacity-0 animate-fade-in animate-delay-100">
+            <Tabs defaultValue="questions" className="w-full animate-fade-in animate-delay-100">
               <TabsList className="grid w-full grid-cols-3 mb-8">
                 <TabsTrigger value="questions">Study Questions</TabsTrigger>
                 <TabsTrigger value="exercises">Practical Exercises</TabsTrigger>
@@ -690,51 +686,17 @@ const TopicDetail = () => {
         </div>
       </section>
       
-      {/* Resources */}
-      <section className="py-12 bg-gray-50 dark:bg-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-playfair text-3xl font-bold mb-8 opacity-0 animate-fade-in">
-              Recommended Resources
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {topic.resources.map((resource: any, index: number) => (
-                <div 
-                  key={index}
-                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm opacity-0 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="p-5">
-                    <h3 className="font-medium text-lg mb-1">{resource.title}</h3>
-                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-3">
-                      <span>{resource.type}</span>
-                      <span className="flex items-center">
-                        <Clock className="h-3.5 w-3.5 mr-1" />
-                        {resource.length}
-                      </span>
-                    </div>
-                    <Button variant="outline" className="w-full gap-2 mt-2">
-                      Access Resource
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Resources section removed as requested */}
       
       {/* FAQs */}
       <section className="py-12 bg-white dark:bg-gray-950">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-playfair text-3xl font-bold mb-8 opacity-0 animate-fade-in">
+            <h2 className="font-playfair text-3xl font-bold mb-8 animate-fade-in">
               Frequently Asked Questions
             </h2>
             
-            <Accordion type="single" collapsible className="opacity-0 animate-fade-in animate-delay-100">
+            <Accordion type="single" collapsible className="animate-fade-in animate-delay-100">
               <AccordionItem value="item-1">
                 <AccordionTrigger>What level of biblical knowledge do I need for this topic?</AccordionTrigger>
                 <AccordionContent>
@@ -768,21 +730,21 @@ const TopicDetail = () => {
       <section className="py-12 bg-scripture text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="font-playfair text-3xl font-bold mb-6 opacity-0 animate-fade-in">
+            <h2 className="font-playfair text-3xl font-bold mb-6 animate-fade-in">
               Continue Your Journey
             </h2>
-            <p className="text-white/90 mb-8 max-w-2xl mx-auto opacity-0 animate-fade-in animate-delay-100">
+            <p className="text-white/90 mb-8 max-w-2xl mx-auto animate-fade-in animate-delay-100">
               Ready to deepen your understanding even further? Explore related topics, join a discussion group, or schedule a guided debriefing session with one of our facilitators.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4 opacity-0 animate-fade-in animate-delay-200">
+            <div className="flex flex-wrap justify-center gap-4 animate-fade-in animate-delay-200">
               <Button className="bg-white text-scripture hover:bg-cream">
                 Join a Discussion Group
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/20">
+              <Button variant="outline" className="border-white text-white hover:bg-white/20 bg-white/10 font-medium shadow-sm">
                 Related Topics
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/20">
+              <Button variant="outline" className="border-white text-white hover:bg-white/20 bg-white/10 font-medium shadow-sm">
                 Schedule a Debriefing
               </Button>
             </div>

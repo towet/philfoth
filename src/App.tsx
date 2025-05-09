@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +11,8 @@ import Resources from "./pages/Resources";
 import About from "./pages/About";
 import Donate from "./pages/Donate";
 import TopicDetail from "./pages/TopicDetail";
+import FloatingContactButton from "./components/FloatingContactButton";
+import "./components/MobileResponsive.css"; // Import global mobile responsive styles
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <FloatingContactButton />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/topics" element={<Topics />} />
