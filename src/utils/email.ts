@@ -1,5 +1,5 @@
 // API endpoint for sending emails
-const API_URL = 'http://localhost:3001/api';
+const API_URL = '/.netlify/functions';
 
 // Function to send join session email
 export const sendJoinSessionEmail = async (formData: {
