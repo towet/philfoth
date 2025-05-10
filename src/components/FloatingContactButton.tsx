@@ -5,7 +5,7 @@ const FloatingContactButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showText, setShowText] = useState(false);
 
-  const whatsappNumber = '254795704273'; // Ensure no '+' or spaces
+  const whatsappNumber = '254757888117'; // Ensure no '+' or spaces
   const emailAddress = 'fothphil@gmail.com';
 
   const toggleOpen = () => setIsOpen(!isOpen);
