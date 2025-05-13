@@ -1,0 +1,290 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 99%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 262 56% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 262 56% 50%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262 56% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 264 71% 75%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 264 71% 75%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 264 71% 75%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-roboto;
+    scroll-behavior: smooth;
+  }
+  
+  h1, h2, h3, h4, h5 {
+    @apply font-playfair;
+  }
+  
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  /* Ensure elements are always visible during animation */
+  .animate-fade-in {
+    animation-name: fade-in;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    opacity: 1; /* Start visible to ensure content is seen */
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0.8; }
+    to { opacity: 1; }
+  }
+  
+  .hover-link {
+    position: relative;
+  }
+  
+  .hover-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s;
+  }
+  
+  .hover-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  
+  .scripture-gradient {
+    background: linear-gradient(135deg, #6E59A5 0%, #9B87F5 100%);
+  }
+  
+  .gold-gradient {
+    background: linear-gradient(135deg, #AA8C2C 0%, #F2D675 100%);
+  }
+  
+  @keyframes subtle-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+  
+  .animate-pulse-subtle {
+    animation: subtle-pulse 3s infinite ease-in-out;
+  }
+  
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slide-in-down {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out forwards;
+  }
+  
+  .animate-slide-in-down {
+    animation: slide-in-down 0.3s ease-out forwards;
+  }
+  
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s infinite ease-in-out;
+  }
+  
+  /* Mobile responsive helpers */
+  .mobile-full {
+    @apply w-full flex-col;
+  }
+  
+  .mobile-py {
+    @apply py-3 md:py-4;
+  }
+  
+  .mobile-px {
+    @apply px-4 md:px-6;
+  }
+  
+  /* Interactive effects */
+  .hover-scale {
+    @apply transition-transform duration-300;
+  }
+  
+  .hover-scale:hover {
+    @apply transform scale-105;
+  }
+  
+  .hover-scale-sm:hover {
+    @apply transform scale-105;
+  }
+  
+  .hover-glow:hover {
+    @apply shadow-lg;
+    box-shadow: 0 0 15px rgba(110, 89, 165, 0.5);
+  }
+  
+  /* Heartbeat animation for donate button */
+  @keyframes heartbeat {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7);
+    }
+    
+    25% {
+      transform: scale(1.05);
+    }
+    
+    50% {
+      transform: scale(1.01);
+      box-shadow: 0 0 0 10px rgba(236, 72, 153, 0);
+    }
+    
+    75% {
+      transform: scale(1.05);
+    }
+    
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(236, 72, 153, 0);
+    }
+  }
+  
+  .donate-btn {
+    background: linear-gradient(45deg, #ec4899, #8b5cf6);
+    color: white;
+    border: none;
+    position: relative;
+    overflow: hidden;
+ 
+    font-weight: 600;
+  }
+  
+  .donate-btn:hover {
+    background: linear-gradient(45deg, #d946ef, #6d28d9);
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+    color: white;
+    transform: translateY(-2px);
+  }
+  
+  .donate-btn::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .donate-btn:hover::before {
+    opacity: 1;
+  }
+  
+  /* Fix for outline buttons to ensure visibility */
+  button[variant="outline"],
+  .button-outline,
+  [data-variant="outline"] {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    font-weight: 500 !important;
+  }
+  
+  /* White outline buttons */
+  button[variant="outline"].border-white,
+  .button-outline.border-white,
+  [data-variant="outline"].border-white {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.7) !important;
+  }
+}
